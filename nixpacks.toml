@@ -10,7 +10,7 @@
     dependsOn = ["git"]
 
 [phases.cmake]
-    cmds = ["cmake .;make -j4","ls","mv libTgBot.a","cd ..","ls"]
+    cmds = ["cmake .","ls","make -j4","ls","mv libTgBot.a","cd ..","ls"]
     dependsOn = ["cd"]
 
 [phases.build]
