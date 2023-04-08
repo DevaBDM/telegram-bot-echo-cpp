@@ -20,7 +20,7 @@
     dependsOn = ["cmake"]
 
 [phases.clean]
-    cmds = ["rm -rf tgbot"]
+    cmds = ["rm -rf tgbot-cpp"]
     dependsOn = ["build"]
 
 [start]
