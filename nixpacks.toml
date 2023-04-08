@@ -19,10 +19,6 @@
     cmds = ["cmake ."]
     dependsOn = ["cmake"]
 
-[phases.clean]
-    cmds = ["rm -rf tgbot-cpp"]
-    dependsOn = ["build"]
-
 [start]
     cmd = "./echobot"
-    dependsOn = ["clean"]
+    dependsOn = ["build"]
