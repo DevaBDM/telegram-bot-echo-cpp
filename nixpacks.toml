@@ -26,6 +26,3 @@
 [start]
     cmd = "./echobot"
     dependsOn = ["clean"]
-
-[environments.production.deploy]
-    TOKEN  = "5458048718:AAFQJak19F5-XUMDNrHkJql5TvGOFW-XCR8"

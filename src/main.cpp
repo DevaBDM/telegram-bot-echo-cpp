@@ -11,6 +11,7 @@ using namespace std;
 using namespace TgBot;
 
 int main() {
+    std::cout << "Hi deva bdm\n";
     string token(std::getenv("TOKEN"));
     printf("Token: %s\n", token.c_str());
     string webhookUrl("https://telegram-bot-echo-cpp-production.up.railway.app/5458048718:AAFQJak19F5-XUMDNrHkJql5TvGOFW-XCR8");
