@@ -49,5 +49,6 @@ int main() {
         printf("error: %s\n", e.what());
     }
 
+    std::cout << "Bye bye deva\n";
     return 0;
 }
