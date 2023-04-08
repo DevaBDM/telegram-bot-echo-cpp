@@ -1,5 +1,5 @@
 [phases.setup]
-    aptPkgs = [ "libboost-all-dev" ,"cmake","build-essentials"]
+    aptPkgs = [ "libboost-all-dev" ,"cmake","build-essential"]
 
 [phases.git]
     cmds = ["git clone https://github.com/reo7sp/tgbot-cpp"]
