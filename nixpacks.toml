@@ -5,17 +5,13 @@
     cmds = ["git clone https://github.com/reo7sp/tgbot-cpp"]
     dependsOn = ["setup"]
 
-[phases.cd]
-    cmds = ["cd tgbot-cpp"]
+[phases.tgbot]
+    cmds = ["cd tgbot-cpp","cmake .","ls","make -j4","ls","mv libTgBot.a .."]
     dependsOn = ["git"]
 
-[phases.cmake]
-    cmds = ["cmake .","ls","make -j4","ls","mv libTgBot.a","cd ..","ls"]
-    dependsOn = ["cd"]
-
 [phases.build]
-    cmds = ["cmake ."]
-    dependsOn = ["cmake"]
+    cmds = ["cmake .","ls","make","ls"]
+    dependsOn = ["tgbot"]
 
 [start]
     cmd = "./echobot"
