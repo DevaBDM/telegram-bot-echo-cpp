@@ -32,6 +32,8 @@ int main() {
         bot.getApi().sendMessage(message->chat->id, "Your message is: " + message->text);
     });
 
+    bot.getApi().sendMessage(604585600, "Hey deva I'm live");
+
     signal(SIGINT, [](int s) {
         printf("SIGINT got\n");
         exit(0);
