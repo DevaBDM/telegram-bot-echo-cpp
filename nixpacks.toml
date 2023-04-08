@@ -16,7 +16,7 @@
     dependsOn = ["cd"]
 
 [phases.build]
-    cmds = ["echo building!"]
+    cmds = ["cmake ."]
     dependsOn = ["cmake"]
 
 [start]
