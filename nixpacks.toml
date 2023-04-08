@@ -6,7 +6,7 @@
     dependsOn = ["setup"]
 
 [phases.tgbot]
-    cmds = ["cd tgbot-cpp","cmake .","ls","make -j4","ls","mv libTgBot.a .."]
+    cmds = ["cd tgbot-cpp;cmake .;ls;make -j4;ls;mv libTgBot.a .."]
     dependsOn = ["git"]
 
 [phases.build]
