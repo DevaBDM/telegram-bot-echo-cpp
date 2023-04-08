@@ -18,7 +18,7 @@ int main() {
     printf("Webhook url: %s\n", webhookUrl.c_str());
     std::string port_s{std::getenv("PORT")};
     unsigned short port_i{static_cast<unsigned short>(std::stoi(port_s))};
-    std::cout << "Port: " << port_i << '\n';
+    std::cout << "Port: " << port_i << ' '<< port_s << '\n';
 
     Bot bot(token);
     bot.getEvents().onCommand("start", [&bot](Message::Ptr message) {
