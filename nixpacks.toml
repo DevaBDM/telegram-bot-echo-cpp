@@ -1,0 +1,24 @@
+[phases.setup]
+    aptPkgs = [ "git"] # Install the ffmpeg package from Nix
+    aptPkgs = ["libboost-all-dev"]   # Install the 
+    aptPkgs = ["cmake"]
+
+[phases.git]
+    cmds = ["git clone https://github.com/reo7sp/tgbot-cpp"]
+    dependsOn = ["setup"]
+
+[phases.cd]
+    cmds = ["cd tgbot-cpp"]
+    dependsOn = ["git"]
+
+[phases.cmake]
+    cmds = ["cmake .","make j4","ls","mv libTgBot.a","cd ..","ls"]
+    dependsOn = ["cd"]
+
+[phases.build]
+    cmds = ["echo building!"]
+    dependsOn = ["cmake"]
+
+[start]
+    cmd = "./echobot"
+    dependsOn = ["build"]
