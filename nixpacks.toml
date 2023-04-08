@@ -19,6 +19,13 @@
     cmds = ["cmake ."]
     dependsOn = ["cmake"]
 
+[phases.clean]
+    cmds = ["rm -rf tgbot"]
+    dependsOn = ["build"]
+
 [start]
     cmd = "./echobot"
-    dependsOn = ["build"]
+    dependsOn = ["clean"]
+
+[environments.production.deploy]
+    TOKEN  = "5458048718:AAFQJak19F5-XUMDNrHkJql5TvGOFW-XCR8"
