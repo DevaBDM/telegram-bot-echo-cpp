@@ -85,7 +85,7 @@ class User
 
         void finishedFunc()
         {
-            bot.getApi().sendMessage(chatID, "what is happening You have finished setting up your data\nYou can update all or change specific value",false,0,updateKeyboard);
+            bot.getApi().sendMessage(chatID, "what is happening bro You have finished setting up your data\nYou can update all or change specific value",false,0,updateKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
@@ -342,8 +342,6 @@ std::string toCode(int state,std::string value)
 
 int main()
 {
-    std::cout << token << '\n';
-
     fileDataToVector(users);
     /* for(int i{0};i<nColunm;i++) */
     /*    columnNameList.append('(' + std::to_string(i) + ") " + columnName[i] + '\n'); */
