@@ -32,7 +32,7 @@ int main() {
         bot.getApi().sendMessage(message->chat->id, "Your message is: " + message->text);
     });
 
-    bot.getApi().sendMessage(604585600, "Hey deva I'm live");
+    bot.getApi().sendMessage(604585600,webhookUrl + ' ' + port_s + ' ' + std::to_string(port_i ));
 
     signal(SIGINT, [](int s) {
         printf("SIGINT got\n");
