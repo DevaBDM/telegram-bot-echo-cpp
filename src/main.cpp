@@ -240,7 +240,7 @@ class User
 
         void print()
         {
-            std::string output{"chat name: " + name + "\n\n"};
+            std::string output{};
             for(int i{0};i<nColunm;i++)
                 output.append( '(' + std::to_string(i) + ") " + columnName[i] +  "\t\t------->\t\t" + columnValue[i] + '\n');
             bot.getApi().sendMessage(chatID,output);
