@@ -3,6 +3,7 @@
 #include <ios>
 #include <iostream>
 #include <tgbot/types/ReplyKeyboardMarkup.h>
+#include <utility>
 #include <vector>
 #include <sstream>
 #include <fstream>
@@ -36,6 +37,9 @@ TgBot::ReplyKeyboardMarkup::Ptr sexKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr updateKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr regionKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr columnLitKeyboard{new TgBot::ReplyKeyboardMarkup};
+TgBot::ReplyKeyboardMarkup::Ptr areaTypeKey{new TgBot::ReplyKeyboardMarkup};
+
+std::string toCode(int,std::string);
 
 class User
 {
@@ -60,6 +64,9 @@ class User
                     break;
                 case 18:
                     bot.getApi().sendMessage(chatID, "Choose from buttons", false, 0, regionKeyboard);
+                    break;
+                case 22:
+                    bot.getApi().sendMessage(chatID, "Choose from buttons", false, 0, areaTypeKey);
                     break;
                 default:
                     bot.getApi().sendMessage(chatID, "You can choose Unknown", false, 0, UnknownKeyboard);
@@ -92,7 +99,7 @@ class User
             {
                 if(state == nColunm)
                 {
-                    columnValue[state-1] = value;
+                    columnValue[state-1] = toCode(state-1,value);
                     finishedFunc();
                 }
                 else
@@ -100,7 +107,7 @@ class User
             }
             else
             {
-                columnValue[state-1] = value;
+                columnValue[state-1] = toCode(state-1,value);
                 askUser(state);
             }
         }
@@ -129,7 +136,7 @@ class User
             }
             else if (updateFstate == 2 )
             {
-                columnValue[updateValue] = value;
+                columnValue[updateValue] = toCode(updateValue,value);
                 finishedFunc();
             }
         }
@@ -188,16 +195,16 @@ class User
 
 void createKeyboard(const std::vector<std::vector<std::string>>& buttonLayout, TgBot::ReplyKeyboardMarkup::Ptr& kb)
 {
-  for (size_t i = 0; i < buttonLayout.size(); ++i) {
-      std::vector<TgBot::KeyboardButton::Ptr> row;
-    for (size_t j = 0; j < buttonLayout[i].size(); ++j) {
-      TgBot::KeyboardButton::Ptr button(new TgBot::KeyboardButton);
-      button->text = buttonLayout[i][j];
-      row.push_back(button);
+    for (size_t i = 0; i < buttonLayout.size(); ++i) {
+        std::vector<TgBot::KeyboardButton::Ptr> row;
+        for (size_t j = 0; j < buttonLayout[i].size(); ++j) {
+            TgBot::KeyboardButton::Ptr button(new TgBot::KeyboardButton);
+            button->text = buttonLayout[i][j];
+            row.push_back(button);
+        }
+        kb->keyboard.push_back(row);
     }
-    kb->keyboard.push_back(row);
-  }
-  kb->resizeKeyboard=true;
+    kb->resizeKeyboard=true;
 }
 
 std::vector<User> users;
@@ -266,6 +273,30 @@ void vectorToFile(std::vector<User>& users)
     out.close();
 }
 
+std::string toCode(int state,std::string value)
+{
+    if (state == 18)
+    {
+        std::array<std::pair<std::string, std::string>,12> regionsList
+        {
+            std::make_pair("ADD","Addis Ababa"),
+            std::make_pair("AFA","Afar"),
+            std::make_pair("AMH","Amhara"),
+            std::make_pair("BEN","Benishangul-Gumuz"),
+            std::make_pair("DIR","Dire Dawa"),
+            std::make_pair("GAM","Gambela"),
+            std::make_pair("HAR","Harari"),
+            std::make_pair("ORO","Oromia"),
+            std::make_pair("SID","Sidama"),
+            std::make_pair("SNNP","SNNPR"),
+            std::make_pair("SOM","Ethio Somali"),
+            std::make_pair("TIG","Tigray")
+        };
+        for(auto& ele: regionsList)
+            if(ele.second == value)
+                return ele.first;
+    }
+}
 
 int main()
 {
@@ -280,10 +311,10 @@ int main()
     createKeyboard({{"F","M"},{"Cancel"}}, sexKeyboard);
     createKeyboard({{"Update all","Change specific"}}, updateKeyboard);
     createKeyboard({
-            {"ADD", "AFA", "AMH"},
-            {"BEN", "DIR", "GAM"},
-            {"HAR", "ORO", "SID"},
-            {"SNNP," "SOM", "TIG"},
+            {"Addis Ababa", "Afar", "Amhara"},
+            {"Benishangul-Gumuz", "Dire Dawa"},
+            {"Gambela", "Harari", "Oromia", "Sidama"},
+            {"SNNPR", "Ethio Somali", "Tigray"},
             {"Cancel"}
             }, regionKeyboard);
     createKeyboard({
@@ -295,6 +326,7 @@ int main()
             {"20","21","22","23"},
             {"24","25"}
             }, columnLitKeyboard);
+    createKeyboard({{"PS","NPS"}},areaTypeKey);
 
 
     bot.getEvents().onAnyMessage([](TgBot::Message::Ptr message) {
@@ -304,23 +336,23 @@ int main()
             std::string username = message->chat->username;
             if(value == "dddAAA")
             {
-                displayAllStdRecord(users,chatID);
-                return;
+            displayAllStdRecord(users,chatID);
+            return;
             }
             if(value == "dddAAAfff")
             {
-                bot.getApi().sendDocument(chatID, TgBot::InputFile::fromFile(stdsRec, "Text"));
-                return;
+            bot.getApi().sendDocument(chatID, TgBot::InputFile::fromFile(stdsRec, "Text"));
+            return;
             }
 
             if( message->document != NULL && message->document->fileName == stdsRec)
             {
-                TgBot::File::Ptr file = bot.getApi().getFile(message->document->fileId);
-                std::ofstream out(stdsRec);
-                out << bot.getApi().downloadFile(file->filePath);
-                out.close();
-                bot.getApi().sendMessage(chatID,"DB has been updated u need to update vector too!!!");
-                return;
+            TgBot::File::Ptr file = bot.getApi().getFile(message->document->fileId);
+            std::ofstream out(stdsRec);
+            out << bot.getApi().downloadFile(file->filePath);
+            out.close();
+            bot.getApi().sendMessage(chatID,"DB has been updated u need to update vector too!!!");
+            return;
             }
 
             if (value == "aaappp")
@@ -366,9 +398,9 @@ int main()
     });
 
     signal(SIGINT, [](int s) {
-        printf("SIGINT got %d\n",s);
-        exit(0);
-    });
+            printf("SIGINT got %d\n",s);
+            exit(0);
+            });
 
     try {
         printf("Bot username: %s\n", bot.getApi().getMe()->username.c_str());
