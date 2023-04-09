@@ -101,7 +101,7 @@ class User
 
         void askUser(int state)
         {
-            bot.getApi().sendMessage(chatID, "Enter your " + columnName[state] + '\n' + "Discription - " + columnDescription[state]);
+            bot.getApi().sendMessage(chatID, "Enter your " + columnName[state] + '?' + '\n' + "Discription - " + columnDescription[state]);
             keyboardBot(state);
         }
 
