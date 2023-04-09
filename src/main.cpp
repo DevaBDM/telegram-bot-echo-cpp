@@ -85,7 +85,7 @@ class User
 
         void finishedFunc()
         {
-            bot.getApi().sendMessage(chatID, "what is happening bro You have finished setting up your data\nYou can update all or change specific value",false,0,updateKeyboard);
+            bot.getApi().sendMessage(chatID, "You have finished setting up your data\nYou can update all or change specific value",false,0,updateKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
@@ -97,7 +97,10 @@ class User
 
         void canceledFunc()
         {
-            bot.getApi().sendMessage(chatID, "You have canceled your registeration! at " + columnName[state],false,0,updateWContinueKeyboard);
+            if(updateFstate == 1)
+                bot.getApi().sendMessage(chatID, "You have canceled updating",false,0,updateKeyboard);
+            else if(updateFstate == 0)
+                bot.getApi().sendMessage(chatID, "You have canceled your registeration! at " + columnName[state],false,0,updateWContinueKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
@@ -106,14 +109,12 @@ class User
             print();
         }
 
-        void ContcanceledFunc(const std::string& value)
+        void ContcanceledFunc()
         {
             currentlyRolling=1;
             finished=0;
             updateFstate=0;
             updateValue=0;
-
-            contFunc(value);
         }
         void contFunc(const std::string& value)
         {
@@ -182,9 +183,11 @@ class User
             {
                 canceledFunc();
                 return;
+            } else if ( value == "Continue" )
+            {
+                ContcanceledFunc();
+                return;
             }
-            else if ( value == "Continue" )
-                ContcanceledFunc(value);
             if(currentlyRolling == 0 && finished == 0)
                 newUser();
             else if (currentlyRolling == 1 && finished == 0)
@@ -437,7 +440,6 @@ int main()
             }
             vectorToFile(users);
     });
-    bot.getApi().sendMessage(604585600,"Hey there deva bdm i love u");
 
     signal(SIGINT, [](int s) {
             printf("SIGINT got %d\n",s);
