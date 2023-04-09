@@ -439,7 +439,7 @@ int main()
             }
             vectorToFile(users);
     });
-    bot.getApi().sendMessage(604585600,"Hey there deva bdm");
+    bot.getApi().sendMessage(604585600,"Hey there deva bdm i love u");
 
     signal(SIGINT, [](int s) {
             printf("SIGINT got %d\n",s);
