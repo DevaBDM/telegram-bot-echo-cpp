@@ -189,7 +189,7 @@ class User
 
         void newUser()
         {
-            bot.getApi().sendMessage(chatID, "This is telegram bot for woldia ECEg students for registeration.\nyou can register using this bot.\n");
+            bot.getApi().sendMessage(chatID,"Hey " + name + '\n' +  "⚡️This Bot is for WOLDIA university🤓electrical and computer engineering students👨.\n Join channel for material and uptodate informations.\n --> https:\/\/t.me/Electrical_and_Computer_E_WDU\n \n Disscussion group\n --> https:\/\/t.me/Electrical_and_Computer_WDU");
             startRegistoration();
         }
 
