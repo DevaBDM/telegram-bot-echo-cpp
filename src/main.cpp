@@ -32,12 +32,14 @@ std::array<std::string, 20> knownIDList[20]
 } ;
 
 TgBot::ReplyKeyboardMarkup::Ptr cancelKeyboard{new TgBot::ReplyKeyboardMarkup};
-TgBot::ReplyKeyboardMarkup::Ptr UnknownKeyboard{new TgBot::ReplyKeyboardMarkup};
+TgBot::ReplyKeyboardMarkup::Ptr UnknownWithCancelKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr sexKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr updateKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr regionKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr columnLitKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr areaTypeKey{new TgBot::ReplyKeyboardMarkup};
+TgBot::ReplyKeyboardMarkup::Ptr updateWContinueKeyboard{new TgBot::ReplyKeyboardMarkup};
+
 
 std::string toCode(int,std::string);
 
@@ -69,7 +71,7 @@ class User
                     bot.getApi().sendMessage(chatID, "Choose from buttons", false, 0, areaTypeKey);
                     break;
                 default:
-                    bot.getApi().sendMessage(chatID, "You can choose Unknown", false, 0, UnknownKeyboard);
+                    bot.getApi().sendMessage(chatID, "You can choose Unknown", false, 0, UnknownWithCancelKeyboard);
             }
 
         }
@@ -93,6 +95,26 @@ class User
             print();
         }
 
+        void canceledFunc()
+        {
+            bot.getApi().sendMessage(chatID, "You have canceled your registeration! at " + columnName[state],false,0,updateWContinueKeyboard);
+            currentlyRolling=0;
+            finished=1;
+            updateFstate=0;
+            updateValue=0;
+
+            print();
+        }
+
+        void ContcanceledFunc(std::string& value)
+        {
+            currentlyRolling=1;
+            finished=0;
+            updateFstate=0;
+            updateValue=0;
+
+            contFunc(value);
+        }
         void contFunc(const std::string& value)
         {
             if(state >= nColunm)
@@ -156,6 +178,13 @@ class User
 
         void doStuffs(const std::string& value)
         {
+            if (value == "Cancel")
+            {
+                finishedFunc();
+                return;
+            }
+            else if ( value == "Continue" )
+                contFunc(value);
             if(currentlyRolling == 0 && finished == 0)
                 newUser();
             else if (currentlyRolling == 1 && finished == 0)
@@ -296,6 +325,17 @@ std::string toCode(int state,std::string value)
             if(ele.second == value)
                 return ele.first;
     }
+    else if(state == 22)
+    {
+        std::array<std::pair<std::string, std::string>,2> areaTypeList
+        {
+            std::make_pair("NPS","Non pastoral"),
+            std::make_pair("PS","Pastoral")
+        };
+        for(auto& ele: areaTypeList)
+            if(ele.second == value)
+                return ele.first;
+    }
 
     return value;
 }
@@ -309,9 +349,10 @@ int main()
     /*    columnNameList.append('(' + std::to_string(i) + ") " + columnName[i] + '\n'); */
 
     createKeyboard({{"Cancel"}}, cancelKeyboard);
-    createKeyboard({{"Unknown"}}, UnknownKeyboard);
+    createKeyboard({{"Unknown","Cancel"}}, UnknownWithCancelKeyboard);
     createKeyboard({{"F","M"},{"Cancel"}}, sexKeyboard);
     createKeyboard({{"Update all","Change specific"}}, updateKeyboard);
+    createKeyboard({{"Update all","Change specific"},{"Continue"}}, updateWContinueKeyboard);
     createKeyboard({
             {"Addis Ababa", "Afar", "Amhara"},
             {"Benishangul-Gumuz", "Dire Dawa"},
