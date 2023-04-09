@@ -106,7 +106,7 @@ class User
             print();
         }
 
-        void ContcanceledFunc(std::string& value)
+        void ContcanceledFunc(const std::string& value)
         {
             currentlyRolling=1;
             finished=0;
