@@ -125,7 +125,7 @@ class User
             if(updateFstate == 1)
                 bot.getApi().sendMessage(chatID, "Changing canceled",false,0,updateKeyboard);
             else if(updateFstate == 0)
-                bot.getApi().sendMessage(chatID, "You have canceled your registeration! at " + columnName[state-1],false,0,updateWContinueKeyboard);
+                bot.getApi().sendMessage(chatID, "You have canceled your registeration! at " + columnName[state-1] + '\n' + "You can Continue updating by choosing \"Continue\" button",false,0,updateWContinueKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
