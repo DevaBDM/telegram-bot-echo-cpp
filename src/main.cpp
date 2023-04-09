@@ -296,6 +296,8 @@ std::string toCode(int state,std::string value)
             if(ele.second == value)
                 return ele.first;
     }
+
+    return value;
 }
 
 int main()
