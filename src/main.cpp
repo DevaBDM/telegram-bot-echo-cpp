@@ -102,7 +102,7 @@ class User
             if(updateFstate == 1)
                 bot.getApi().sendMessage(chatID, "Changing canceled",false,0,updateKeyboard);
             else if(updateFstate == 0)
-                bot.getApi().sendMessage(chatID, "You have canceled your registeration! at " + columnName[state],false,0,updateWContinueKeyboard);
+                bot.getApi().sendMessage(chatID, "You have canceled your registeration! at " + columnName[state-1],false,0,updateWContinueKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
@@ -113,6 +113,20 @@ class User
 
         void ContcanceledFunc()
         {
+            if(state >= nColunm)
+            {
+                if(state == nColunm)
+                {
+                    finishedFunc();
+                }
+                else
+                    std::cout << "ERROR: beyond limit column number";
+            }
+            else
+            {
+                askUser(state-1);
+            }
+
             currentlyRolling=1;
             finished=0;
             updateFstate=0;
