@@ -23,13 +23,36 @@ const int nColunm = 26;
 /* std::string columnNameList{}; */
 
 std::string columnName[nColunm]={"student national ID", "student institution ID", "first name", "first name Amh", "father name", "father name Amh", "grandfather name", "grandfather name Amh", "last name", "last name Amh", "date of birth", "place of birth", "place of birth Amh", "email", "phone", "gender", "country", "citizenship", "region", "zone", "kebele", "woreda", "area type", "student national examiniation ID", "student tax IDentification number", "student national system ID"};
-std::string columnDescription[nColunm]={"student national ID", "student institution ID", "first name", "first name Amh", "father name", "father name Amh", "grandfather name", "grandfather name Amh", "last name", "last name Amh", "date of birth", "place of birth", "place of birth Amh", "email", "phone", "gender", "country", "citizenship", "region", "zone", "kebele", "woreda", "area type", "student national examiniation ID", "student tax IDentification number", "student national system ID"};
+std::string columnDescription[nColunm]={
+    "",
+    "Your university ID number. like WDU1300000",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "your email that we can reach you easly. like tommy@gmail.com",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "Pastoral(PS) means rural place where there main income is from farming.\nNon pastoral(NPS) means places like town.",
+    "",
+    "",
+    ""};
 TgBot::Bot bot(token);
 
-std::array<std::string, 20> knownIDList[20]
-{
-
-} ;
+std::array<std::string, 20> knownIDList[20] {} ;
 
 TgBot::ReplyKeyboardMarkup::Ptr cancelKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr UnknownWithCancelKeyboard{new TgBot::ReplyKeyboardMarkup};
@@ -62,30 +85,30 @@ class User
         {
             switch (state) {
                 case 15:
-                    bot.getApi().sendMessage(chatID, "Choose from buttons", false, 0, sexKeyboard);
+                    bot.getApi().sendMessage(chatID, "Choose your sex from buttons", false, 0, sexKeyboard);
                     break;
                 case 18:
-                    bot.getApi().sendMessage(chatID, "Choose from buttons", false, 0, regionKeyboard);
+                    bot.getApi().sendMessage(chatID, "Choose your region from buttons", false, 0, regionKeyboard);
                     break;
                 case 22:
                     bot.getApi().sendMessage(chatID, "Choose from buttons", false, 0, areaTypeKey);
                     break;
                 default:
-                    bot.getApi().sendMessage(chatID, "You can choose Unknown", false, 0, UnknownWithCancelKeyboard);
+                    bot.getApi().sendMessage(chatID, "You can choose Unknown if you don't know or don't understand the question.", false, 0, UnknownWithCancelKeyboard);
             }
 
         }
 
         void askUser(int state)
         {
-            bot.getApi().sendMessage(chatID, "Enter your " + columnName[state] + '\n' + "More discription" + columnDescription[state]);
+            bot.getApi().sendMessage(chatID, "Enter your " + columnName[state] + '\n' + "Discription - " + columnDescription[state]);
             keyboardBot(state);
         }
 
 
         void finishedFunc()
         {
-            bot.getApi().sendMessage(chatID, "You have finished setting up your data\nYou can update all or change specific value",false,0,updateKeyboard);
+            bot.getApi().sendMessage(chatID, "You have finished setting up your data.\nYou can update all or change specific value.\nchoose from buttons.",false,0,updateKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
