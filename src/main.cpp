@@ -97,8 +97,10 @@ class User
 
         void canceledFunc()
         {
-            if(updateFstate == 1)
+            if(updateFstate == 2)
                 bot.getApi().sendMessage(chatID, "You have canceled updating",false,0,updateKeyboard);
+            if(updateFstate == 1)
+                bot.getApi().sendMessage(chatID, "Changing canceled",false,0,updateKeyboard);
             else if(updateFstate == 0)
                 bot.getApi().sendMessage(chatID, "You have canceled your registeration! at " + columnName[state],false,0,updateWContinueKeyboard);
             currentlyRolling=0;
@@ -368,9 +370,10 @@ int main()
             {"12","13","14","15"},
             {"16","17","18","19"},
             {"20","21","22","23"},
-            {"24","25"}
+            {"24","25"},
+            {"Cancel"}
             }, columnLitKeyboard);
-    createKeyboard({{"PS","NPS"}},areaTypeKey);
+    createKeyboard({{"PS","NPS"},{"Cancel"}},areaTypeKey);
 
 
     bot.getEvents().onAnyMessage([](TgBot::Message::Ptr message) {
