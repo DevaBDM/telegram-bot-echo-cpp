@@ -180,11 +180,11 @@ class User
         {
             if (value == "Cancel")
             {
-                finishedFunc();
+                canceledFunc();
                 return;
             }
             else if ( value == "Continue" )
-                contFunc(value);
+                ContcanceledFunc(value);
             if(currentlyRolling == 0 && finished == 0)
                 newUser();
             else if (currentlyRolling == 1 && finished == 0)
@@ -439,7 +439,7 @@ int main()
             }
             vectorToFile(users);
     });
-    bot.getApi().sendMessage(604585600,"Hey there");
+    bot.getApi().sendMessage(604585600,"Hey there deva bdm");
 
     signal(SIGINT, [](int s) {
             printf("SIGINT got %d\n",s);
