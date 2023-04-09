@@ -85,7 +85,7 @@ class User
 
         void finishedFunc()
         {
-            bot.getApi().sendMessage(chatID, "You have finished setting up your data\nYou can update all or change specific value",false,0,updateKeyboard);
+            bot.getApi().sendMessage(chatID, "what is happening You have finished setting up your data\nYou can update all or change specific value",false,0,updateKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
