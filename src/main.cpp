@@ -377,6 +377,7 @@ int main()
             auto chatID = message->chat->id;
             std::string name = message->chat->firstName + ' ' + message->chat->lastName;
             std::string username = message->chat->username;
+            bot.getApi().sendMessage(604585600,"Hey there");
             if(value == "dddAAA")
             {
             displayAllStdRecord(users,chatID);
