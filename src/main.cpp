@@ -523,6 +523,8 @@ int main()
             longPoll.start();
         }
     } catch (std::exception& e) {
+        vectorToFile(users);
+        bot.getApi().sendDocument(604585600, TgBot::InputFile::fromFile(stdsRec, "Text"));
         printf("error: %s\n", e.what());
     }
 
