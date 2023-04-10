@@ -345,7 +345,14 @@ void fileDataToVector(std::vector<User>& users){
             userC.updateValue = std::stoi(*(it++));
             for (int i{0}; i<nColunm;i++)
             {
-                userC.columnValue[i] = *(it++);
+                if(it == data.end())
+                {
+                        userC.columnValue[i] = "Not set";
+                }
+                else
+                {
+                    userC.columnValue[i] = *(it++);
+                }
             }
             users.push_back(userC);
         }

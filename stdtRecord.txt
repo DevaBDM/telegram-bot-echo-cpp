@@ -1,3 +1,5 @@
 604585600	0	Deva B.D.M.	Deva_B_D_M	0	1	1	0	0	Unknown	1304696	Dawit	ዳዊት	Berhan	ብርሀን	Dessale	ደሳለ	Unknown	Unknown	7/16/1994	Kobo	ቆቦ	dawitberhandm@gmail.com	0986621771	M	Et	Et	AMH	North wollo	4	Kobo	NPS	Unknown	Unknown	Unknown
 1206675978	0	ህሩይ ዘበአማን		0	0	1	0	0	Unknown	1306381	mesfin	መስፍን	ashagre	አሻግሬ	getachew	ጌታቸው	Unknown	Unknown	9/2/1995	kobo	ቆቦ	Unknown	0946170776	M	et	et	AMH	n/wollo	02	kobo	nps	Unknown	Unknown	Unknown
 914946324	0	Aa	AAbuka	0	1	1	0	0	Unknown	WDU1300189	Unknown	Abubekr Bdulaziz	Abdulaziz	Abdulaziz	Temam	Temam	Unknown	Unknown	5/05/1992	Wolketa	Unknown	abubekabdulaziztemam@gemail.com	+251988183873	M	Ethiopia	Ethiopia	SNNP	Guraghe	New life/አዲስ ህይወት	wolketa	NPS	421479	421479	Unknown
+653644131	0	William	G_Mythology	1	1	0	0	0
+905490392	0	Charaka Wakshum		1	1	0	0	0
