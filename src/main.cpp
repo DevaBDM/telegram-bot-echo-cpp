@@ -276,7 +276,7 @@ class User
 
         void printDebug(std::int64_t chatID)
         {
-            std::string output{"chatID: " + std::to_string(chatID) + ' '  + "ID: " + ID + ' ' + "chat name: " + name + '\n' + "username: " + userName + ' ' + "currentlyRolling: " + std::to_string(currentlyRolling) + '\n' + "state: " + std::to_string(state) + ' ' + "finished: " + std::to_string(finished) + '\n' + "updateFstate: " + std::to_string(updateFstate) + ' ' + "updateValue: " + std::to_string(updateValue) + '\n'};
+            std::string output{"chatID: " + std::to_string(User::chatID) + ' '  + "ID: " + ID + ' ' + "chat name: " + name + '\n' + "username: " + userName + ' ' + "currentlyRolling: " + std::to_string(currentlyRolling) + '\n' + "state: " + std::to_string(state) + ' ' + "finished: " + std::to_string(finished) + '\n' + "updateFstate: " + std::to_string(updateFstate) + ' ' + "updateValue: " + std::to_string(updateValue) + '\n'};
             for(int i{0};i<nColunm;i++)
                 output.append( columnName[i] +  "\t=>\t" + columnValue[i] + '\n');
             bot.getApi().sendMessage(chatID,output);
@@ -525,7 +525,7 @@ int main()
     } catch (std::exception& e) {
         vectorToFile(users);
         bot.getApi().sendDocument(604585600, TgBot::InputFile::fromFile(stdsRec, "Text"));
-        printf("error: %s\n", e.what());
+        bot.getApi().sendMessage(604585600,"error: " + std::string{ e.what() });
     }
 
     return 0;
