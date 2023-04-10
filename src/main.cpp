@@ -202,7 +202,7 @@ class User
             }
             else if (updateFstate == 1)
             {
-                int exist=0
+                int exist=0;
                 for(auto& ele:columnNumberString)
                 {
                     if(ele==value)
