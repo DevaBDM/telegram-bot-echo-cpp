@@ -66,6 +66,16 @@ TgBot::ReplyKeyboardMarkup::Ptr updateWContinueKeyboard{new TgBot::ReplyKeyboard
 
 std::string toCode(int,std::string);
 
+std::array<std::string,nColunm+1> columnNumberString{
+             "0","1","2","3",
+            "4","5","6","7",
+            "8","9","10","11",
+            "12","13","14","15",
+            "16","17","18","19",
+            "20","21","22","23",
+            "24","25", "Cancel"
+};
+
 class User
 {
     public:
@@ -184,7 +194,7 @@ class User
                 }
                 else if ( value == "Change specific" )
                 {
-                    bot.getApi().sendMessage(chatID,"\n choose from value you want to change",false,0,columnLitKeyboard);
+                    bot.getApi().sendMessage(chatID,"\n choose value you want to change",false,0,columnLitKeyboard);
                     updateFstate=1;
                 }
                 else
@@ -192,9 +202,26 @@ class User
             }
             else if (updateFstate == 1)
             {
-                updateValue = std::stoi(value);
-                askUser(updateValue);
-                updateFstate = 2;
+                int exist=0
+                for(auto& ele:columnNumberString)
+                {
+                    if(ele==value)
+                    {
+                        exist=1;
+                        return;
+                    }
+                }
+                if(exist == 1)
+                {
+                    updateValue = std::stoi(value);
+                    askUser(updateValue);
+                    updateFstate = 2;
+                }
+                else
+                {
+                    bot.getApi().sendMessage(chatID,"\n choose value you want to change, choose from buttons",false,0,columnLitKeyboard);
+                    updateFstate=1;
+                }
             }
             else if (updateFstate == 2 )
             {
