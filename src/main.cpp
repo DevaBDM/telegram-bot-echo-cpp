@@ -208,7 +208,7 @@ class User
                     if(ele==value)
                     {
                         exist=1;
-                        return;
+                        break;
                     }
                 }
                 if(exist == 1)
