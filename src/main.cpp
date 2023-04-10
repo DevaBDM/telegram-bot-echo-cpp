@@ -22,31 +22,57 @@ char delimeter='\t';
 const int nColunm = 26;
 /* std::string columnNameList{}; */
 
-std::string columnName[nColunm]={"student national ID", "student institution ID", "first name", "first name Amh", "father name", "father name Amh", "grandfather name", "grandfather name Amh", "last name", "last name Amh", "date of birth", "place of birth", "place of birth Amh", "email", "phone", "gender", "country", "citizenship", "region", "zone", "kebele", "woreda", "area type", "student national examiniation ID", "student tax IDentification number", "student national system ID"};
+std::string columnName[nColunm]={
+    "Student national ID",
+    "Student institution ID",
+    "First name",
+    "First name in Amharic",
+    "Father name",
+    "Father name in Amharic",
+    "Grandfather name",
+    "Grandfather name in Amharic",
+    "Last name",
+    "Last name in Amharic",
+    "Date of birth",
+    "Place of birth",
+    "Place of birth in Amharic",
+    "Email",
+    "Phone",
+    "Gender",
+    "Country",
+    "Citizenship",
+    "Region",
+    "Zone",
+    "Kebele",
+    "Woreda",
+    "Area type",
+    "Student national examiniation ID",
+    "Student tax IDentification number",
+    "Student national system ID"};
 std::string columnDescription[nColunm]={
     "",
-    "Your university ID number. like WDU1300000",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
+    "Your university ID number. like \"WDU1300000\"",
+    "Your name in english. like \"Tomas\"",
+    "Your name in Amharic language, like \"ቶማስ\"",
+    "Your father name in english. like \"Daniel\"",
+    "Your father name in Amharic language. like \"ዳንኤል\"",
+    "Ypur grandfather name in english, like \"Abebe\"",
+    "Your grandfather name in Amharic, like \"አበበ\"",
+    "Your last name in english, like \"Kebede\"",
+    "Your last name in Amharic language, like \"ከበደ\"",
+    "Enter with format of month/day/year",
     "",
     "",
     "your email that we can reach you easly. like tommy@gmail.com",
     "",
+    "choose \"F\" for female or choose \"M\" for male",
     "",
     "",
     "",
     "",
     "",
     "",
-    "",
-    "Pastoral(PS) means rural place where there main income is from farming.\nNon pastoral(NPS) means places like town.",
+    "Pastoral(PS) means rural place where there main income is from farming.\nNon pastoral(NPS) means non rural places like town.",
     "",
     "",
     ""};
@@ -67,13 +93,13 @@ TgBot::ReplyKeyboardMarkup::Ptr updateWContinueKeyboard{new TgBot::ReplyKeyboard
 std::string toCode(int,std::string);
 
 std::array<std::string,nColunm+1> columnNumberString{
-             "0","1","2","3",
-            "4","5","6","7",
-            "8","9","10","11",
-            "12","13","14","15",
-            "16","17","18","19",
-            "20","21","22","23",
-            "24","25", "Cancel"
+    "0","1","2","3",
+        "4","5","6","7",
+        "8","9","10","11",
+        "12","13","14","15",
+        "16","17","18","19",
+        "20","21","22","23",
+        "24","25", "Cancel"
 };
 
 class User
@@ -104,7 +130,7 @@ class User
                     bot.getApi().sendMessage(chatID, "Choose from buttons", false, 0, areaTypeKey);
                     break;
                 default:
-                    bot.getApi().sendMessage(chatID, "You can choose Unknown if you don't know or don't understand the question.", false, 0, UnknownWithCancelKeyboard);
+                    bot.getApi().sendMessage(chatID, "You can choose Unknown if you don't know the value or don't understand the question.", false, 0, UnknownWithCancelKeyboard);
             }
 
         }
@@ -114,7 +140,6 @@ class User
             bot.getApi().sendMessage(chatID, "Enter your " + columnName[state] + '?' + '\n' + "Discription - " + columnDescription[state]);
             keyboardBot(state);
         }
-
 
         void finishedFunc()
         {
@@ -165,6 +190,7 @@ class User
             updateFstate=0;
             updateValue=0;
         }
+
         void contFunc(const std::string& value)
         {
             if(state >= nColunm)
@@ -271,7 +297,6 @@ class User
             for(int i{0};i<nColunm;i++)
                 output.append( '(' + std::to_string(i) + ") " + columnName[i] +  "\t\t------->\t\t" + columnValue[i] + '\n');
             bot.getApi().sendMessage(chatID,output);
-
         }
 
         void printDebug(std::int64_t chatID)
@@ -280,7 +305,6 @@ class User
             for(int i{0};i<nColunm;i++)
                 output.append( columnName[i] +  "\t=>\t" + columnValue[i] + '\n');
             bot.getApi().sendMessage(chatID,output);
-
         }
 
         void saveToFile(std::ofstream& out)
