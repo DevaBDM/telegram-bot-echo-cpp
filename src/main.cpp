@@ -113,12 +113,12 @@ class M
 
         void send(const std::string& text)
         {
-            storedMessage += text + "\n<b>===================================</b>\n=> ";
+            storedMessage += "=> "text + "\n<b>===================================</b>\n";
         }
 
         void send(const std::string& text,TgBot::GenericReply::Ptr K)
         {
-            storedMessage += text + "\n<b>===================================</b>\n=> ";
+            storedMessage += "=> "text + "\n<b>===================================</b>\n";
             if(keyboardStatus == nullptr)
             {
                 keyboardStatus=K;
@@ -479,7 +479,7 @@ void sendALL(const std::int64_t& C,const std::string& S,TgBot::GenericReply::Ptr
 {
     if( S != "" )
     {
-        bot.getApi().sendMessage(C,S,false,0,K);
+        bot.getApi().sendMessage(C,S,false,0,K,"HTML");
         mess.clear();
     }
     /* else */
