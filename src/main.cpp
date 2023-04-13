@@ -576,9 +576,9 @@ int main()
                     userN->doStuffs(value);
                     users.push_back(*userN);
                 }
+            vectorToFile(users);
             }
             sendALL(chatID,mess.storedMessage, mess.keyboardStatus);
-            vectorToFile(users);
     });
 
     signal(SIGINT, [](int s) {
