@@ -113,12 +113,12 @@ class M
 
         void send(const std::string& text)
         {
-            storedMessage += text + "\n🛠⚡🔌💻💡🌩🔦☑️🔋📶\n";
+            storedMessage += text + "\n----------------------\n";
         }
 
         void send(const std::string& text,TgBot::GenericReply::Ptr K)
         {
-            storedMessage += text + "\n🛠⚡🔌💻💡🌩🔦☑️🔋📶\n";
+            storedMessage += text + "\n----------------------\n";
             if(keyboardStatus == nullptr)
             {
                 keyboardStatus=K;
@@ -576,7 +576,7 @@ int main()
                     userN->doStuffs(value);
                     users.push_back(*userN);
                 }
-            vectorToFile(users);
+                vectorToFile(users);
             }
             sendALL(chatID,mess.storedMessage, mess.keyboardStatus);
     });
