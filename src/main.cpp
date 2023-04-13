@@ -113,12 +113,12 @@ class M
 
         void send(const std::string& text)
         {
-            storedMessage += text + "\n----------------------\n";
+            storedMessage += text + "\n===================================\n";
         }
 
         void send(const std::string& text,TgBot::GenericReply::Ptr K)
         {
-            storedMessage += text + "\n----------------------\n";
+            storedMessage += text + "\n===================================\n";
             if(keyboardStatus == nullptr)
             {
                 keyboardStatus=K;
@@ -130,7 +130,7 @@ class M
 
         void clear()
         {
-            storedMessage="";
+            storedMessage="🌍School👨‍🎓of⚡️Electrical👩‍🎓and🫶Computer🎓Engineering🥸, WDU🇪🇹\n";
             keyboardStatus=nullptr;
         }
 };
