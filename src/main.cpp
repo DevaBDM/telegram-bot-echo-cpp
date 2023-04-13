@@ -108,17 +108,17 @@ std::array<std::string,nColunm+1> columnNumberString{
 class M
 {
     public:
-        std::string storedMessage{"🌍School👨‍🎓of⚡️Electrical👩‍🎓and🫶Computer🎓Engineering🥸, WDU🇪🇹\n"};
+        std::string storedMessage{"<pre>🌍School👨‍🎓of⚡️Electrical👩‍🎓and🫶Computer🎓Engineering🥸, WDU🇪🇹</pre>\n"};
         TgBot::GenericReply::Ptr keyboardStatus{nullptr};
 
         void send(const std::string& text)
         {
-            storedMessage += text + "\n===================================\n";
+            storedMessage += text + "\n<b>===================================</b>\n=> ";
         }
 
         void send(const std::string& text,TgBot::GenericReply::Ptr K)
         {
-            storedMessage += text + "\n===================================\n";
+            storedMessage += text + "\n<b>===================================</b>\n=> ";
             if(keyboardStatus == nullptr)
             {
                 keyboardStatus=K;
@@ -130,7 +130,7 @@ class M
 
         void clear()
         {
-            storedMessage="🌍School👨‍🎓of⚡️Electrical👩‍🎓and🫶Computer🎓Engineering🥸, WDU🇪🇹\n";
+            storedMessage="<pre>🌍School👨‍🎓of⚡️Electrical👩‍🎓and🫶Computer🎓Engineering🥸, WDU🇪🇹</pre>\n";
             keyboardStatus=nullptr;
         }
 };
@@ -156,16 +156,16 @@ class User
         {
             switch (state) {
                 case 15:
-                    mess.send( "Choose your sex from buttons", sexKeyboard);
+                    mess.send( "<b>👇Choose your sex from buttons👉🔽</b>", sexKeyboard);
                     break;
                 case 18:
-                    mess.send("Choose your region from buttons", regionKeyboard);
+                    mess.send("<b>👇Choose your region from buttons👉🔽</b>", regionKeyboard);
                     break;
                 case 22:
-                    mess.send("Choose from buttons", areaTypeKey);
+                    mess.send("<b>👇Choose from buttons👉🔽</b>", areaTypeKey);
                     break;
                 default:
-                    mess.send("You can choose Unknown if you don't know the value or don't understand the question.", UnknownWithCancelKeyboard);
+                    mess.send("<b>👇You can choose Unknown if you don't know the value or don't understand the question.👉🔽</b>", UnknownWithCancelKeyboard);
             }
         }
 
@@ -190,11 +190,11 @@ class User
         void canceledFunc()
         {
             if(updateFstate == 2)
-                mess.send("You have canceled updating",updateKeyboard);
+                mess.send("<b>You have canceled updating</b>",updateKeyboard);
             if(updateFstate == 1)
-                mess.send("Changing canceled",updateKeyboard);
+                mess.send("<b>Changing canceled</b>",updateKeyboard);
             else if(updateFstate == 0)
-                mess.send("You have canceled your registeration! at " + columnName[state-1] + '\n' + "You can Continue updating by choosing \"Continue\" button",updateWContinueKeyboard);
+                mess.send("<b>You have canceled your registeration! at " + columnName[state-1] + "</b>\n" + "You can Continue updating by choosing <b>Continue</b> button",updateWContinueKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
@@ -279,7 +279,7 @@ class User
                 }
                 else
                 {
-                    mess.send("\nChoose value you want to change, choose from buttons",columnLitKeyboard);
+                    mess.send("\nChoose value you want to change\nChoose from buttons",columnLitKeyboard);
                     updateFstate=1;
                 }
             }
@@ -329,7 +329,7 @@ class User
         {
             std::string output{};
             for(int i{0};i<nColunm;i++)
-                output.append( '(' + std::to_string(i) + ") " + columnName[i] +  "\t\t------->\t\t" + columnValue[i] + '\n');
+                output.append( "<b>(" + std::to_string(i) + ") " + columnName[i] +  ":</b> " + columnValue[i] + '\n');
             mess.send(output);
         }
 
