@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <ios>
 #include <iostream>
+#include <sys/socket.h>
 #include <sys/types.h>
 #include <tgbot/types/GenericReply.h>
 #include <tgbot/types/ReplyKeyboardMarkup.h>
@@ -107,8 +108,7 @@ std::array<std::string,nColunm+1> columnNumberString{
 class M
 {
     public:
-        std::string* storedMessagePtr{new std::string{ "🌍School👨‍🎓of⚡️Electrical👩‍🎓and🫶Computer🎓Engineering🥸, WDU🇪🇹\n" }};
-        std::string& storedMessage{*storedMessagePtr};
+        std::string storedMessage{"🌍School👨‍🎓of⚡️Electrical👩‍🎓and🫶Computer🎓Engineering🥸, WDU🇪🇹\n"};
         TgBot::GenericReply::Ptr keyboardStatus{nullptr};
 
         void send(const std::string& text)
@@ -339,7 +339,7 @@ class User
             for(int i{0};i<nColunm;i++)
                 output.append( columnName[i] +  "\t=>\t" + columnValue[i] + '\n');
 
-            mess.send(output);
+            bot.getApi().sendMessage(chatID,output);
         }
 
         void saveToFile(std::ofstream& out)
@@ -475,6 +475,19 @@ std::string toCode(int state,std::string value)
     return value;
 }
 
+void sendALL(const std::int64_t& C,const std::string& S,TgBot::GenericReply::Ptr K)
+{
+    if( S != "" )
+    {
+        bot.getApi().sendMessage(C,S,false,0,K);
+        mess.clear();
+    }
+    /* else */
+    /* { */
+    /*         bot.getApi().sendMessage(C,"Message Error"); */
+    /* } */
+}
+
 int main()
 {
     fileDataToVector(users);
@@ -514,78 +527,65 @@ int main()
             if(value == "dddAAA")
             {
             displayAllStdRecord(users,chatID);
-            bot.getApi().sendMessage(chatID,mess.storedMessage,false,0,mess.keyboardStatus);
-            mess.clear();
-            return;
             }
-            if(value == "dddAAAfff")
+            else if(value == "dddAAAfff")
             {
             bot.getApi().sendDocument(chatID, TgBot::InputFile::fromFile(stdsRec, "Text"));
-            mess.clear();
-            return;
             }
-
-            if( message->document != NULL && message->document->fileName == stdsRec)
+            else if( message->document != NULL && message->document->fileName == stdsRec)
             {
             TgBot::File::Ptr file = bot.getApi().getFile(message->document->fileId);
             std::ofstream out(stdsRec);
             out << bot.getApi().downloadFile(file->filePath);
             out.close();
             mess.send("DB has been updated u need to update vector too!!!");
-            bot.getApi().sendMessage(chatID,mess.storedMessage,false,0,mess.keyboardStatus);
-            mess.clear();
-            return;
             }
-
-            if (value == "aaappp")
+            else if (value == "aaappp")
             {
                 fileDataToVector(users);
-                mess.clear();
-                return;
             }
-
-            if (value == "uuuppp")
+            else if (value == "uuuppp")
             {
                 users.clear();
                 fileDataToVector(users);
-                mess.clear();
-                return;
             }
 
-            if (value == "sssxxx")
+            else if (value == "sssxxx")
             {
                 vectorToFile(users);
-                mess.clear();
-                return;
             }
+            else
+            {
+                int flag=0;
+                for (auto& ele : users) {
+                    if (ele.chatID == chatID)
+                    {
+                        ele.userName = username;
+                        ele.name = name;
+                        ele.doStuffs(value);
+                        flag=1;
+                    }
+                }
 
-            int flag=0;
-            for (auto& ele : users) {
-                if (ele.chatID == chatID)
+                if(!flag)
                 {
-                    ele.userName = username;
-                    ele.name = name;
-                    ele.doStuffs(value);
-                    flag=1;
+                    User* userN{new User};
+                    userN->chatID = chatID;
+                    userN->userName = username;
+                    userN->name = name;
+                    userN->doStuffs(value);
+                    users.push_back(*userN);
                 }
             }
-
-            if(!flag)
-            {
-                User* userN{new User};
-                userN->chatID = chatID;
-                userN->userName = username;
-                userN->name = name;
-                userN->doStuffs(value);
-                users.push_back(*userN);
-            }
-            bot.getApi().sendMessage(chatID,mess.storedMessage,false,0,mess.keyboardStatus);
-            mess.clear();
+            sendALL(chatID,mess.storedMessage, mess.keyboardStatus);
             vectorToFile(users);
     });
 
     signal(SIGINT, [](int s) {
             printf("SIGINT got %d\n",s);
+            vectorToFile(users);
+            bot.getApi().sendDocument(604585600, TgBot::InputFile::fromFile(stdsRec, "Text"));
+            bot.getApi().sendMessage(604585600,"SIGINT GOT");
             exit(0);
             });
 
@@ -595,13 +595,12 @@ int main()
 
         TgBot::TgLongPoll longPoll(bot);
         while (true) {
-            printf("Long poll started\n");
             longPoll.start();
         }
     } catch (std::exception& e) {
         vectorToFile(users);
         bot.getApi().sendDocument(604585600, TgBot::InputFile::fromFile(stdsRec, "Text"));
-        bot.getApi().sendMessage(604585600,"error: " + std::string{ e.what() });
+        bot.getApi().sendMessage(604585600,"Error: " + std::string{ e.what() });
     }
 
     return 0;
