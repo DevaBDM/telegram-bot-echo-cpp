@@ -113,12 +113,12 @@ class M
 
         void send(const std::string& text)
         {
-            storedMessage += "=> "text + "\n<b>===================================</b>\n";
+            storedMessage += "=> " + text + "\n<b>===================================</b>\n";
         }
 
         void send(const std::string& text,TgBot::GenericReply::Ptr K)
         {
-            storedMessage += "=> "text + "\n<b>===================================</b>\n";
+            storedMessage += "=> " + text + "\n<b>===================================</b>\n";
             if(keyboardStatus == nullptr)
             {
                 keyboardStatus=K;
