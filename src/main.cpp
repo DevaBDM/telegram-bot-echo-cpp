@@ -513,11 +513,15 @@ int main()
             if(value == "dddAAA")
             {
             displayAllStdRecord(users,chatID);
+            bot.getApi().sendMessage(chatID,mess.storedMessage,false,0,mess.keyboardStatus);
+            mess.clear();
             return;
             }
             if(value == "dddAAAfff")
             {
             bot.getApi().sendDocument(chatID, TgBot::InputFile::fromFile(stdsRec, "Text"));
+            bot.getApi().sendMessage(chatID,mess.storedMessage,false,0,mess.keyboardStatus);
+            mess.clear();
             return;
             }
 
@@ -528,6 +532,8 @@ int main()
             out << bot.getApi().downloadFile(file->filePath);
             out.close();
             mess.send("DB has been updated u need to update vector too!!!");
+            bot.getApi().sendMessage(chatID,mess.storedMessage,false,0,mess.keyboardStatus);
+            mess.clear();
             return;
             }
 
