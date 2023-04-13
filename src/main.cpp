@@ -113,12 +113,12 @@ class M
 
         void send(const std::string& text)
         {
-            storedMessage += "=> " + text + "\n<b>===================================</b>\n";
+            storedMessage += "=> " + text + "<b>===================================</b>\n";
         }
 
         void send(const std::string& text,TgBot::GenericReply::Ptr K)
         {
-            storedMessage += "=> " + text + "\n<b>===================================</b>\n";
+            storedMessage += "=> " + text + "<b>===================================</b>\n";
             if(keyboardStatus == nullptr)
             {
                 keyboardStatus=K;
@@ -328,7 +328,7 @@ class User
         void print()
         {
             for(int i{0};i<nColunm;i++)
-                mess.send( "<b>(" + std::to_string(i) + ") " + columnName[i] +  ":</b> " + columnValue[i] + '\n');
+                mess.storedMessage.append( "<b>(" + std::to_string(i) + ") " + columnName[i] +  ":</b> " + columnValue[i] + '\n');
         }
 
         void printDebug(std::int64_t chatID)
