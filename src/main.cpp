@@ -520,7 +520,6 @@ int main()
             if(value == "dddAAAfff")
             {
             bot.getApi().sendDocument(chatID, TgBot::InputFile::fromFile(stdsRec, "Text"));
-            bot.getApi().sendMessage(chatID,mess.storedMessage,false,0,mess.keyboardStatus);
             mess.clear();
             return;
             }
@@ -540,6 +539,7 @@ int main()
             if (value == "aaappp")
             {
                 fileDataToVector(users);
+                mess.clear();
                 return;
             }
 
@@ -547,12 +547,14 @@ int main()
             {
                 users.clear();
                 fileDataToVector(users);
+                mess.clear();
                 return;
             }
 
             if (value == "sssxxx")
             {
                 vectorToFile(users);
+                mess.clear();
                 return;
             }
 
