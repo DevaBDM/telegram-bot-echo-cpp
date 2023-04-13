@@ -112,12 +112,12 @@ class M
 
         void send(const std::string& text)
         {
-            storedMessage += "\n\t-----------\n" + text;
+            storedMessage += text + "\n\t-------------------------------\n";
         }
 
         void send(const std::string& text,TgBot::GenericReply::Ptr K)
         {
-            storedMessage += "\n\t-----------\n" + text;
+            storedMessage += text + "\n\t-------------------------------\n";
             if(keyboardStatus == nullptr)
             {
                 keyboardStatus=K;
