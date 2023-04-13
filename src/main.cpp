@@ -107,17 +107,18 @@ std::array<std::string,nColunm+1> columnNumberString{
 class M
 {
     public:
-        std::string storedMessage{"🌍School👨‍🎓of⚡️Electrical👩‍🎓and🫶Computer🎓Engineering🥸, WDU🇪🇹\n"};
+        std::string* storedMessagePtr{new std::string{ "🌍School👨‍🎓of⚡️Electrical👩‍🎓and🫶Computer🎓Engineering🥸, WDU🇪🇹\n" }};
+        std::string& storedMessage{*storedMessagePtr};
         TgBot::GenericReply::Ptr keyboardStatus{nullptr};
 
         void send(const std::string& text)
         {
-            storedMessage += text + "\n\t⚡️⚡️✂️⚡️⚡️🇪🇹⚡️⚡️🎓⚡️⚡️🥸⚡️⚡️👩⚡️⚡️🌍⚡️⚡️👨\n";
+            storedMessage += text + "\n🛠⚡🔌💻💡🌩🔦☑️🔋📶\n";
         }
 
         void send(const std::string& text,TgBot::GenericReply::Ptr K)
         {
-            storedMessage += text + "\n\t⚡️⚡️✂️⚡️⚡️🇪🇹⚡️⚡️🎓⚡️⚡️🥸⚡️⚡️👩⚡️⚡️🌍⚡️⚡️👨\n";
+            storedMessage += text + "\n🛠⚡🔌💻💡🌩🔦☑️🔋📶\n";
             if(keyboardStatus == nullptr)
             {
                 keyboardStatus=K;
