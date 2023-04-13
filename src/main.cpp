@@ -2,6 +2,8 @@
 #include <cstdint>
 #include <ios>
 #include <iostream>
+#include <sys/types.h>
+#include <tgbot/types/GenericReply.h>
 #include <tgbot/types/ReplyKeyboardMarkup.h>
 #include <utility>
 #include <vector>
@@ -50,21 +52,21 @@ std::string columnName[nColunm]={
     "Student tax IDentification number",
     "Student national system ID"};
 std::string columnDescription[nColunm]={
-    "your national ID number. like WLDU0000114 ",
-    "Your university ID number. like \"WDU1300000\"",
-    "Your name in english. like \"Tomas\"",
-    "Your name in Amharic language. like \"ቶማስ\"",
-    "Your father name in english. like \"Daniel\"",
-    "Your father name in Amharic language. like \"ዳንኤል\"",
-    "Ypur grandfather name in english. like \"Abebe\"",
-    "Your grandfather name in Amharic. like \"አበበ\"",
-    "Your last name in english. like \"Kebede\"",
-    "Your last name in Amharic language. like \"ከበደ\"",
-    "Enter with format of month/day/year",
-    "Your birth place name in english. like \"Addis Ababa\"",
-    "Your birth place name in Amharic language. like \"አዲስ አበባ\"",
-    "Your email that we can reach you easly. like tommy@gmail.com",
-    "like \"0900000000\"",
+    "your national ID number.\nExample -> WLDU0000114 ",
+    "Your university ID number.\nExample -> \"WDU1300000\"",
+    "Your name in english.\nExample -> \"Tomas\"",
+    "Your name in Amharic language.\nExample -> \"ቶማስ\"",
+    "Your father name in english.\nExample -> \"Daniel\"",
+    "Your father name in Amharic language.\nExample -> \"ዳንኤል\"",
+    "Ypur grandfather name in english.\nExample -> \"Abebe\"",
+    "Your grandfather name in Amharic.\nExample -> \"አበበ\"",
+    "Your last name in english.\nExample -> \"Kebede\"",
+    "Your last name in Amharic language.\nExample -> \"ከበደ\"",
+    "Enter with format of month/day/year in Ethiopian count",
+    "Your birth place name in english.\nExample -> \"Addis Ababa\"",
+    "Your birth place name in Amharic language.\nExample -> \"አዲስ አበባ\"",
+    "Your email that we can reach you easly.\nExample -> tommydani242@gmail.com",
+    "Example \"0923852925\"",
     "Choose \"F\" for female or choose \"M\" for male",
     "",
     "",
@@ -102,6 +104,38 @@ std::array<std::string,nColunm+1> columnNumberString{
         "24","25", "Cancel"
 };
 
+class M
+{
+    public:
+        std::string storedMessage{""};
+        TgBot::GenericReply::Ptr keyboardStatus{nullptr};
+
+        void send(const std::string& text)
+        {
+            storedMessage += "\n\t-----------\n" + text;
+        }
+
+        void send(const std::string& text,TgBot::GenericReply::Ptr K)
+        {
+            storedMessage += "\n\t-----------\n" + text;
+            if(keyboardStatus == nullptr)
+            {
+                keyboardStatus=K;
+            }
+            else
+                storedMessage+="\n Error: mulltiple keyboardStatus\n";
+        }
+
+
+        void clear()
+        {
+            storedMessage="";
+            keyboardStatus=nullptr;
+        }
+};
+
+M mess{};
+
 class User
 {
     public:
@@ -121,29 +155,28 @@ class User
         {
             switch (state) {
                 case 15:
-                    bot.getApi().sendMessage(chatID, "Choose your sex from buttons", false, 0, sexKeyboard);
+                    mess.send( "Choose your sex from buttons", sexKeyboard);
                     break;
                 case 18:
-                    bot.getApi().sendMessage(chatID, "Choose your region from buttons", false, 0, regionKeyboard);
+                    mess.send("Choose your region from buttons", regionKeyboard);
                     break;
                 case 22:
-                    bot.getApi().sendMessage(chatID, "Choose from buttons", false, 0, areaTypeKey);
+                    mess.send("Choose from buttons", areaTypeKey);
                     break;
                 default:
-                    bot.getApi().sendMessage(chatID, "You can choose Unknown if you don't know the value or don't understand the question.", false, 0, UnknownWithCancelKeyboard);
+                    mess.send("You can choose Unknown if you don't know the value or don't understand the question.", UnknownWithCancelKeyboard);
             }
-
         }
 
         void askUser(int state)
         {
-            bot.getApi().sendMessage(chatID, "Enter your " + columnName[state] + '?' + '\n' + "Discription - " + columnDescription[state]);
+            mess.send("Enter your " + columnName[state] + '?' + '\n' + "Discription - " + columnDescription[state]);
             keyboardBot(state);
         }
 
         void finishedFunc()
         {
-            bot.getApi().sendMessage(chatID, "You have finished setting up your data.\nYou can update all or change specific value.\nchoose from buttons.",false,0,updateKeyboard);
+            mess.send("You have finished setting up your data.\nYou can update all or change specific value.\nchoose from buttons.",updateKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
@@ -156,11 +189,11 @@ class User
         void canceledFunc()
         {
             if(updateFstate == 2)
-                bot.getApi().sendMessage(chatID, "You have canceled updating",false,0,updateKeyboard);
+                mess.send("You have canceled updating",updateKeyboard);
             if(updateFstate == 1)
-                bot.getApi().sendMessage(chatID, "Changing canceled",false,0,updateKeyboard);
+                mess.send("Changing canceled",updateKeyboard);
             else if(updateFstate == 0)
-                bot.getApi().sendMessage(chatID, "You have canceled your registeration! at " + columnName[state-1] + '\n' + "You can Continue updating by choosing \"Continue\" button",false,0,updateWContinueKeyboard);
+                mess.send("You have canceled your registeration! at " + columnName[state-1] + '\n' + "You can Continue updating by choosing \"Continue\" button",updateWContinueKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
@@ -201,7 +234,7 @@ class User
                     finishedFunc();
                 }
                 else
-                    std::cout << "ERROR: beyond limit column number";
+                    std::cout << "ERROR: Beyond limit column number";
             }
             else
             {
@@ -220,7 +253,7 @@ class User
                 }
                 else if ( value == "Change specific" )
                 {
-                    bot.getApi().sendMessage(chatID,"\n choose value you want to change",false,0,columnLitKeyboard);
+                    mess.send("\nChoose value you want to change",columnLitKeyboard);
                     updateFstate=1;
                 }
                 else
@@ -245,7 +278,7 @@ class User
                 }
                 else
                 {
-                    bot.getApi().sendMessage(chatID,"\n choose value you want to change, choose from buttons",false,0,columnLitKeyboard);
+                    mess.send("\nChoose value you want to change, choose from buttons",columnLitKeyboard);
                     updateFstate=1;
                 }
             }
@@ -265,7 +298,7 @@ class User
 
         void newUser()
         {
-            bot.getApi().sendMessage(chatID,"Hey " + name + '\n' +  "⚡️This Bot is for WOLDIA university🤓electrical and computer engineering students👨.\n Join channel for material and uptodate informations.\n --> https:\/\/t.me/Electrical_and_Computer_E_WDU\n \n Disscussion group\n --> https:\/\/t.me/Electrical_and_Computer_WDU");
+            mess.send("Hey " + name + '\n' +  "⚡️This Bot is for WOLDIA university🤓electrical and computer engineering students👨.\n Join channel for material and uptodate informations.\n --> https:\/\/t.me/Electrical_and_Computer_E_WDU");
             startRegistoration();
         }
 
@@ -296,7 +329,7 @@ class User
             std::string output{};
             for(int i{0};i<nColunm;i++)
                 output.append( '(' + std::to_string(i) + ") " + columnName[i] +  "\t\t------->\t\t" + columnValue[i] + '\n');
-            bot.getApi().sendMessage(chatID,output);
+            mess.send(output);
         }
 
         void printDebug(std::int64_t chatID)
@@ -304,7 +337,8 @@ class User
             std::string output{"chatID: " + std::to_string(User::chatID) + ' '  + "ID: " + ID + ' ' + "chat name: " + name + '\n' + "username: " + userName + ' ' + "currentlyRolling: " + std::to_string(currentlyRolling) + '\n' + "state: " + std::to_string(state) + ' ' + "finished: " + std::to_string(finished) + '\n' + "updateFstate: " + std::to_string(updateFstate) + ' ' + "updateValue: " + std::to_string(updateValue) + '\n'};
             for(int i{0};i<nColunm;i++)
                 output.append( columnName[i] +  "\t=>\t" + columnValue[i] + '\n');
-            bot.getApi().sendMessage(chatID,output);
+
+            mess.send(output);
         }
 
         void saveToFile(std::ofstream& out)
@@ -493,7 +527,7 @@ int main()
             std::ofstream out(stdsRec);
             out << bot.getApi().downloadFile(file->filePath);
             out.close();
-            bot.getApi().sendMessage(chatID,"DB has been updated u need to update vector too!!!");
+            mess.send("DB has been updated u need to update vector too!!!");
             return;
             }
 
@@ -536,6 +570,8 @@ int main()
                 userN->doStuffs(value);
                 users.push_back(*userN);
             }
+            bot.getApi().sendMessage(chatID,mess.storedMessage,false,0,mess.keyboardStatus);
+            mess.clear();
             vectorToFile(users);
     });
 
@@ -561,4 +597,3 @@ int main()
 
     return 0;
 }
-
