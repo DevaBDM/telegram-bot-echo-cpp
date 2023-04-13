@@ -254,7 +254,7 @@ class User
                 }
                 else if ( value == "Change specific" )
                 {
-                    mess.send("\nChoose value you want to change",columnLitKeyboard);
+                    mess.send("Choose value you want to change",columnLitKeyboard);
                     updateFstate=1;
                 }
                 else
@@ -279,7 +279,7 @@ class User
                 }
                 else
                 {
-                    mess.send("\nChoose value you want to change\nChoose from buttons",columnLitKeyboard);
+                    mess.send("Choose value you want to change\nChoose from buttons",columnLitKeyboard);
                     updateFstate=1;
                 }
             }
@@ -327,10 +327,8 @@ class User
 
         void print()
         {
-            std::string output{};
             for(int i{0};i<nColunm;i++)
-                output.append( "<b>(" + std::to_string(i) + ") " + columnName[i] +  ":</b> " + columnValue[i] + '\n');
-            mess.send(output);
+                mess.send( "<b>(" + std::to_string(i) + ") " + columnName[i] +  ":</b> " + columnValue[i] + '\n');
         }
 
         void printDebug(std::int64_t chatID)
