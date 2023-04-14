@@ -1,0 +1,12 @@
+ADD	Addis Ababa
+AFA	Afar
+AMH	Amhara
+BEN	Benishangul-Gumuz
+DIR	Dire Dawa
+GAM	Gambela
+HAR	Harari
+ORO	Oromia
+SID	Sidama
+SNNP	SNNPR
+SOM	Ethio Somali
+TIG	Tigray

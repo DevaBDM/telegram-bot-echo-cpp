@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <tgbot/types/GenericReply.h>
+#include <tgbot/types/KeyboardButton.h>
 #include <tgbot/types/ReplyKeyboardMarkup.h>
 #include <utility>
 #include <vector>
@@ -19,6 +20,13 @@
 #include <tgbot/tgbot.h>
 
 std::string token(std::getenv("TOKEN"));
+using file_type=std::vector<std::vector<std::string>> ;
+using line_type=std::vector<std::string>;
+
+file_type region;
+file_type zone;
+file_type areaType;
+file_type woreda;
 
 char stdsRec[] = "stdtRecord.txt";
 char delimeter='\t';
@@ -46,29 +54,29 @@ std::string columnName[nColunm]={
     "Citizenship",
     "Region",
     "Zone",
-    "Kebele",
     "Woreda",
+    "Kebele",
     "Area type",
     "Student national examiniation ID",
     "Student tax IDentification number",
     "Student national system ID"};
 std::string columnDescription[nColunm]={
-    "your national ID number.\nExample -> WLDU0000114 ",
-    "Your university ID number.\nExample -> \"WDU1300000\"",
-    "Your name in english.\nExample -> \"Tomas\"",
-    "Your name in Amharic language.\nExample -> \"ቶማስ\"",
-    "Your father name in english.\nExample -> \"Daniel\"",
-    "Your father name in Amharic language.\nExample -> \"ዳንኤል\"",
-    "Ypur grandfather name in english.\nExample -> \"Abebe\"",
-    "Your grandfather name in Amharic.\nExample -> \"አበበ\"",
-    "Your last name in english.\nExample -> \"Kebede\"",
-    "Your last name in Amharic language.\nExample -> \"ከበደ\"",
-    "Enter with format of month/day/year in Ethiopian count",
-    "Your birth place name in english.\nExample -> \"Addis Ababa\"",
-    "Your birth place name in Amharic language.\nExample -> \"አዲስ አበባ\"",
-    "Your email that we can reach you easly.\nExample -> tommydani242@gmail.com",
-    "Example \"0923852925\"",
-    "Choose \"F\" for female or choose \"M\" for male",
+    "your national ID number.\n<b>Example: </b>WLDU0000114 ",
+    "Your university ID number.\n<b>Example: </b>\"WDU1300000\"",
+    "Your name in english.\n<b>Example: </b>\"Tomas\"",
+    "Your name in Amharic language.\n<b>Example: </b>\"ቶማስ\"",
+    "Your father name in english.\n<b>Example: </b>\"Daniel\"",
+    "Your father name in Amharic language.\n<b>Example: </b>\"ዳንኤል\"",
+    "Ypur grandfather name in english.\n<b>Example: </b>\"Abebe\"",
+    "Your grandfather name in Amharic.\n<b>Example: </b>\"አበበ\"",
+    "Your last name in english.\n<b>Example: </b>\"Kebede\"",
+    "Your last name in Amharic language.\n<b>Example: </b>\"ከበደ\"",
+    "Enter with format of <b>month/day/year</b> in Ethiopian count",
+    "Your birth place name in english.\n<b>Example: </b>\"Addis Ababa\"",
+    "Your birth place name in Amharic language.\n<b>Example: </b>\"አዲስ አበባ\"",
+    "Your email that we can reach you easly.\n<b>Example: </b>tommydani242@gmail.com",
+    "<b>Example: </b> \"0923852925\"",
+    "Choose \"<b>F</b>\" for female or choose \"<b>M</b>\" for male",
     "",
     "",
     "",
@@ -91,9 +99,11 @@ TgBot::ReplyKeyboardMarkup::Ptr regionKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr columnLitKeyboard{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr areaTypeKey{new TgBot::ReplyKeyboardMarkup};
 TgBot::ReplyKeyboardMarkup::Ptr updateWContinueKeyboard{new TgBot::ReplyKeyboardMarkup};
+TgBot::ReplyKeyboardMarkup::Ptr keyboard{new TgBot::ReplyKeyboardMarkup};
 
 
-std::string toCode(int,std::string);
+std::string toCode(int,const std::string&);
+void createKeyboardFromFile(const std::string& value,file_type& data,TgBot::ReplyKeyboardMarkup::Ptr& kb=keyboard,line_type::size_type datai=2, line_type::size_type buttonString=1,int columnL=4);
 
 std::array<std::string,nColunm+1> columnNumberString{
     "0","1","2","3",
@@ -161,6 +171,14 @@ class User
                 case 18:
                     mess.send("<b>👇Choose your region from buttons👉🔽</b>", regionKeyboard);
                     break;
+                case 19:
+                    createKeyboardFromFile(columnValue[18],zone);
+                    mess.send("<b>👇Choose your zone from buttons👉🔽</b>", keyboard);
+                    break;
+                case 20:
+                    createKeyboardFromFile(columnValue[19],woreda);
+                    mess.send("<b>👇Choose your woreda from buttons👉🔽</b>", keyboard);
+                    break;
                 case 22:
                     mess.send("<b>👇Choose from buttons👉🔽</b>", areaTypeKey);
                     break;
@@ -171,13 +189,13 @@ class User
 
         void askUser(int state)
         {
-            mess.send("Enter your " + columnName[state] + '?' + '\n' + "Discription - " + columnDescription[state]);
+            mess.send("👉Enter your " + columnName[state] + '?' + '\n' + "<b>Discription: </b>" + columnDescription[state]);
             keyboardBot(state);
         }
 
         void finishedFunc()
         {
-            mess.send("You have finished setting up your data.\nYou can update all or change specific value.\nchoose from buttons.",updateKeyboard);
+            mess.send("👍You have finished setting up your data.\nYou can update all or change specific value.\nchoose from buttons.",updateKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
@@ -190,11 +208,11 @@ class User
         void canceledFunc()
         {
             if(updateFstate == 2)
-                mess.send("<b>You have canceled updating</b>",updateKeyboard);
+                mess.send("<b>🛑You have canceled updating🛑</b>",updateKeyboard);
             if(updateFstate == 1)
-                mess.send("<b>Changing canceled</b>",updateKeyboard);
+                mess.send("<b>🛑Changing canceled🛑</b>",updateKeyboard);
             else if(updateFstate == 0)
-                mess.send("<b>You have canceled your registeration! at " + columnName[state-1] + "</b>\n" + "You can Continue updating by choosing <b>Continue</b> button",updateWContinueKeyboard);
+                mess.send("<b>You have canceled your registeration! at 🛑" + columnName[state-1] + "🛑</b>\n" + "You can Continue updating by choosing <b>Continue</b> button",updateWContinueKeyboard);
             currentlyRolling=0;
             finished=1;
             updateFstate=0;
@@ -254,7 +272,7 @@ class User
                 }
                 else if ( value == "Change specific" )
                 {
-                    mess.send("Choose value you want to change",columnLitKeyboard);
+                    mess.send("<b>👇Choose value you want to change👉🔽</b>",columnLitKeyboard);
                     updateFstate=1;
                 }
                 else
@@ -279,7 +297,7 @@ class User
                 }
                 else
                 {
-                    mess.send("Choose value you want to change\nChoose from buttons",columnLitKeyboard);
+                    mess.send("<b>👇Choose value you want to change👉🔽\nC👉🔽hoose from buttons👉🔽</b>",columnLitKeyboard);
                     updateFstate=1;
                 }
             }
@@ -299,7 +317,7 @@ class User
 
         void newUser()
         {
-            mess.send("Hey " + name + '\n' +  "⚡️This Bot is for WOLDIA university🤓electrical and computer engineering students👨.\n Join channel for material and uptodate informations.\n --> https:\/\/t.me/Electrical_and_Computer_E_WDU");
+            mess.send("Hey " + name + '\n' +  "⚡️This Bot is for WOLDIA university🤓electrical and computer engineering students👨.\n Join channel for material and uptodate informations.\n --> https://t.me/Electrical_and_Computer_E_WDU");
             startRegistoration();
         }
 
@@ -350,16 +368,51 @@ class User
 
 void createKeyboard(const std::vector<std::vector<std::string>>& buttonLayout, TgBot::ReplyKeyboardMarkup::Ptr& kb)
 {
-    for (size_t i = 0; i < buttonLayout.size(); ++i) {
+        for(const auto& ele:buttonLayout){
         std::vector<TgBot::KeyboardButton::Ptr> row;
-        for (size_t j = 0; j < buttonLayout[i].size(); ++j) {
+        for(const auto& rowele:ele){
             TgBot::KeyboardButton::Ptr button(new TgBot::KeyboardButton);
-            button->text = buttonLayout[i][j];
+            button->text = rowele;
+            button->requestContact=false;
+            button->requestLocation=false;
             row.push_back(button);
         }
         kb->keyboard.push_back(row);
     }
     kb->resizeKeyboard=true;
+}
+
+void createKeyboardFromFile(const std::string& value,file_type& data,TgBot::ReplyKeyboardMarkup::Ptr& kb,line_type::size_type datai,line_type::size_type buttonString,int columnL)
+{
+    kb->keyboard.clear();
+    file_type buttonLayout;
+    line_type keyBoardColumn;
+    int ii{1};
+    for(auto& ele:data)
+    {
+        if(ele[datai] == value)
+        {
+            if(ii < columnL)
+            {
+                keyBoardColumn.push_back(ele[buttonString]);
+                ++ii;
+            }
+            else if ( ii == columnL ){
+                keyBoardColumn.push_back(ele[buttonString]);
+                buttonLayout.push_back(keyBoardColumn);
+                keyBoardColumn.clear();
+                ii=1;
+            }
+        }
+    }
+    if(!keyBoardColumn.empty())
+    {
+        buttonLayout.push_back(keyBoardColumn);
+        keyBoardColumn.clear();
+    }
+    buttonLayout.push_back(line_type{"Cancel"});
+
+    createKeyboard(buttonLayout,kb);
 }
 
 std::vector<User> users;
@@ -417,6 +470,26 @@ void fileDataToVector(std::vector<User>& users){
     file.close();
 }
 
+void fileDataToVectorData(const std::string& fileS,file_type& data){
+    std::ifstream file(fileS);
+    std::string str;
+
+    if(!file)	{
+        std::cout<<"\nNo Record found !!";
+        exit(3);
+    }
+
+    while (getline(file, str)) {
+        if(str.length()>0)
+        {
+            line_type data2;
+            split(str, data2);
+            data.push_back(data2);
+        }
+    }
+    file.close();
+}
+
 void displayAllStdRecord(std::vector<User>& users,std::int64_t chatID)
 {
     for (auto& ele : users) {
@@ -434,42 +507,32 @@ void vectorToFile(std::vector<User>& users)
     }
     out.close();
 }
+std::string code(const std::string& value,const file_type& list,file_type::size_type R=0,file_type::size_type S=1)
+{
+        for(auto& ele: list)
+            if(ele[S] == value)
+                return ele[R];
+        return "Unknown";
+}
 
-std::string toCode(int state,std::string value)
+std::string toCode(int state,const std::string& value)
 {
     if (state == 18)
     {
-        std::array<std::pair<std::string, std::string>,12> regionsList
-        {
-            std::make_pair("ADD","Addis Ababa"),
-            std::make_pair("AFA","Afar"),
-            std::make_pair("AMH","Amhara"),
-            std::make_pair("BEN","Benishangul-Gumuz"),
-            std::make_pair("DIR","Dire Dawa"),
-            std::make_pair("GAM","Gambela"),
-            std::make_pair("HAR","Harari"),
-            std::make_pair("ORO","Oromia"),
-            std::make_pair("SID","Sidama"),
-            std::make_pair("SNNP","SNNPR"),
-            std::make_pair("SOM","Ethio Somali"),
-            std::make_pair("TIG","Tigray")
-        };
-        for(auto& ele: regionsList)
-            if(ele.second == value)
-                return ele.first;
+        return code(value,region);
+    }
+    else if(state == 19)
+    {
+        return code(value,zone);
+    }
+    else if(state == 20)
+    {
+        return code(value,woreda);
     }
     else if(state == 22)
     {
-        std::array<std::pair<std::string, std::string>,2> areaTypeList
-        {
-            std::make_pair("NPS","Non pastoral"),
-            std::make_pair("PS","Pastoral")
-        };
-        for(auto& ele: areaTypeList)
-            if(ele.second == value)
-                return ele.first;
+        return code(value,areaType);
     }
-
     return value;
 }
 
@@ -489,6 +552,10 @@ void sendALL(const std::int64_t& C,const std::string& S,TgBot::GenericReply::Ptr
 int main()
 {
     fileDataToVector(users);
+    fileDataToVectorData("region.txt", region);
+    fileDataToVectorData("zone.txt", zone);
+    fileDataToVectorData("areatype.txt",areaType);
+    fileDataToVectorData("woreda.txt", woreda);
     /* for(int i{0};i<nColunm;i++) */
     /*    columnNameList.append('(' + std::to_string(i) + ") " + columnName[i] + '\n'); */
 

@@ -1,0 +1,2 @@
+NPS	Non pastoral
+PS	pastoral
