@@ -658,7 +658,7 @@ int main()
         printf("Bot username: %s\n", bot.getApi().getMe()->username.c_str());
         bot.getApi().deleteWebhook();
 
-        TgBot::TgLongPoll longPoll(bot,1000);
+        TgBot::TgLongPoll longPoll(bot,10000);
         while (true) {
             longPoll.start();
         }
